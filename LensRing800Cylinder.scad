@@ -2,15 +2,16 @@ $fa = 1;
 $fs = 0.4;
 
 // units: mm
-barrelCircumference = 286; // measured - to give wriggle-room, we could increase this a little
+barrelCircumferenceMeasured = 286; // measured - to give wriggle-room, we could increase this a little
+barrelCircumference = 290;
 footOffsetArc = 12;
 switchArc = 80;
 footWidthArc = 40;
 
 // All to be verified - inexactly measured so far!
 bandWidth = 35;
-bandInnerRadius = 90;
-bandThickness = 3;
+bandInnerRadius = barrelCircumference / (2 * PI);
+bandThickness = 2;
 switchBandRemain = 8; // how much we leave above the cut-out for the switches
 switchGapAngle = ceil(switchArc * (360 / barrelCircumference));
 echo("switchGapAngle", switchGapAngle);
@@ -20,7 +21,7 @@ echo("footGapStartAngle", footGapStartAngle);
 
 footGapWidthAngle = ceil(footWidthArc * (360 / barrelCircumference));
 shieldEdgeAngle = (footGapStartAngle - (switchGapAngle / 2)); // how wide we want the "pillars"
-shieldOverhang = 30; // mm
+shieldOverhang = 15; // mm
 shieldLimiterWidth = bandInnerRadius * 1.5;
 shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
 
@@ -69,7 +70,7 @@ color("gray")
                 }
                 //// button shield limits
                 limiterEdge = (bandInnerRadius + shieldOverhang - shieldSquareTrim) * 2;
-                fudge = 9; // stop "nicks" at edge of visor
+                fudge = 4; // stop "nicks" at edge of visor
                 color("green")
                     cube([limiterEdge, bandInnerRadius * 2 - fudge, 1.1 * bandWidth], center = true);
             }
