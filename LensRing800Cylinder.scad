@@ -6,20 +6,22 @@
 $fa = 2;
 $fs = 5;
 
-// units: mm
+// Configuration
+// units: mm (we can measure this with a flexible tape, easier than measuring diameter or angle)
 barrelCircumferenceMeasured = 286; // measured - to give wriggle-room, we could increase this a little
 barrelCircumference = 290;
-footOffsetArc = 12;
 switchArc = 80;
+footOffsetArc = 12; // from end of switches
 footWidthArc = 40;
 
-bandWidth = 35;
+bandWidth = 35; // cylinder height of band
 bandInnerRadius = barrelCircumference / (2 * PI);
 bandThickness = 2;
 upperSwitchGuardWidth = 8; // how much we leave above the cut-out for the switches
 lowerSwitchGuardWidth = 3; // < 0… don't
-lowerSwitchGuardRelief = 4;
-// we havs space for lowerSwitchGuardWidth = 3 but we need a wedge offset to allow the ring to slide on
+lowerSwitchGuardRelief = 4; // space to let us slide the lower (front) guard over the switches
+
+// Maths
 switchGapAngle = ceil(switchArc * (360 / barrelCircumference));
 footGapStartAngle = ceil(((switchArc / 2) + footOffsetArc) * (360 / barrelCircumference));
 footGapWidthAngle = ceil(footWidthArc * (360 / barrelCircumference));
@@ -49,7 +51,7 @@ module switchWindowWedge(xProject = 0, reduceAngle = 0) {
   translate([xProject, 0, + lowerSwitchGuardWidth - (bandWidth / 2)]) // move down to leave visor space
     rotate(- (switchGapAngle - reduceAngle) / 2)
       rotate_extrude(angle = (switchGapAngle - reduceAngle))
-        translate([(bandInnerRadius - xProject) * 0.9, 0, 0])
+        translate([(bandInnerRadius - xProject) - 0.5, 0, 0])
           square([(shieldThickness) * 1.5, switchCutWedgeHeight]);
 }
 
@@ -119,8 +121,10 @@ color("gray")
 
     // gaps:
     union() {
-      switchWindowWedge(- bandInnerRadius * 0.95, 50);
-      switchWindowBox();
+      switchWindowWedge(0, 0);
+      //      switchWindowWedge(- bandInnerRadius * 0.95, 50);
+      //      switchWindowWedge(- bandInnerRadius * 0.95, 50);
+      //      switchWindowBox();
       // gap for foot
       footWindow();
       lowerShieldReliefWedge();
