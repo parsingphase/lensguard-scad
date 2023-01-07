@@ -35,12 +35,16 @@ module switchShield() {
 
 module switchWindow() {
   // gap for switches
-  switchCutWedgeHeight = bandWidth;
-  translate([0, 0, - switchCutWedgeHeight / 2]) // span z-plane
-    translate([0, 0, - switchBandRemain]) // move down to leave visor space
-      rotate(- switchGapAngle / 2)
-        rotate_extrude(angle = switchGapAngle)
-          square([(bandInnerRadius + shieldOverhang) * 1.1, switchCutWedgeHeight]);
+  switchCutWedgeHeight = bandWidth - switchBandRemain;
+
+  // we only want to span the z-plane if we're assuming symmetry…
+  //  translate([0, 0, - switchCutWedgeHeight / 2]) // span z-plane
+  // bottom of our wedge should be on z-plane after extrusion
+  // if we move down by (bandWidth / 2), wedge bottom is at ring bottom
+  translate([0, 0, - (bandWidth / 2)]) // move down to leave visor space
+    rotate(- switchGapAngle / 2)
+      rotate_extrude(angle = switchGapAngle)
+        square([(bandInnerRadius + shieldOverhang) * 1.1, switchCutWedgeHeight]);
 }
 
 module switchShieldBoundingBox() {
@@ -81,3 +85,4 @@ color("gray")
       footWindow();
     }
   }
+
