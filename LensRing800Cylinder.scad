@@ -1,3 +1,8 @@
+// fine
+$fa = 1;
+$fs = 0.4;
+
+//fast
 $fa = 2;
 $fs = 5;
 
@@ -8,24 +13,19 @@ footOffsetArc = 12;
 switchArc = 80;
 footWidthArc = 40;
 
-// All to be verified - inexactly measured so far!
 bandWidth = 35;
 bandInnerRadius = barrelCircumference / (2 * PI);
 bandThickness = 2;
 switchBandRemain = 8; // how much we leave above the cut-out for the switches
 switchGapAngle = ceil(switchArc * (360 / barrelCircumference));
-echo("switchGapAngle", switchGapAngle);
-
 footGapStartAngle = ceil(((switchArc / 2) + footOffsetArc) * (360 / barrelCircumference));
-echo("footGapStartAngle", footGapStartAngle);
-
 footGapWidthAngle = ceil(footWidthArc * (360 / barrelCircumference));
 shieldEdgeAngle = (footGapStartAngle - (switchGapAngle / 2)); // how wide we want the "pillars"
 shieldOverhang = 15; // mm
 shieldLimiterWidth = bandInnerRadius * 1.5;
 shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
 
-module window() {
+module switchWindow() {
   // gap for switches
   switchCutWedgeHeight = bandWidth;
   translate([0, 0, - switchCutWedgeHeight / 2]) // span z-plane
@@ -33,6 +33,14 @@ module window() {
       rotate(- switchGapAngle / 2)
         rotate_extrude(angle = switchGapAngle)
           square([bandInnerRadius * 1.1, switchCutWedgeHeight]);
+}
+
+module footWindow() {
+  footCutWedgeHeight = bandWidth * 1.1;
+  translate([0, 0, - footCutWedgeHeight / 2]) // span z-plane
+    rotate(footGapStartAngle)
+      rotate_extrude(angle = footGapWidthAngle)
+        square([bandInnerRadius * 1.1, footCutWedgeHeight]);
 }
 
 module mainBand() {
@@ -79,13 +87,8 @@ color("gray")
 
     // gaps:
     union() {
-      // switch window
-      window();
+      switchWindow();
       // gap for foot
-      footCutWedgeHeight = bandWidth * 1.1;
-      translate([0, 0, - footCutWedgeHeight / 2]) // span z-plane
-        rotate(footGapStartAngle)
-          rotate_extrude(angle = footGapWidthAngle)
-            square([bandInnerRadius * 1.1, footCutWedgeHeight]);
+      footWindow();
     }
   }
