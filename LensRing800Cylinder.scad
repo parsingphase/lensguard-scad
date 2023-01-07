@@ -1,6 +1,6 @@
 // fine
-$fa = 1;
-$fs = 0.4;
+//$fa = 1;
+//$fs = 0.4;
 
 //fast
 $fa = 2;
@@ -17,14 +17,19 @@ bandWidth = 35;
 bandInnerRadius = barrelCircumference / (2 * PI);
 bandThickness = 2;
 upperSwitchGuardThickness = 8; // how much we leave above the cut-out for the switches
-lowerSwitchGuardThickness = 3;
+lowerSwitchGuardThickness = -1; // < 0… don't
+// we havs space for lowerSwitchGuardThickness = 3 but we need a wedge offset to allow the ring to slide on
 switchGapAngle = ceil(switchArc * (360 / barrelCircumference));
 footGapStartAngle = ceil(((switchArc / 2) + footOffsetArc) * (360 / barrelCircumference));
 footGapWidthAngle = ceil(footWidthArc * (360 / barrelCircumference));
 shieldEdgeAngle = (footGapStartAngle - (switchGapAngle / 2)); // how wide we want the "pillars"
-shieldOverhang = 15; // mm
+shieldOverhang = 8; // mm, starts just beyond the inner edge of the band
 shieldLimiterWidth = bandInnerRadius * 1.5;
-shieldSquareTrim = 5; // how far we cut the shield back from being circular; <0 = "don't
+shieldSquareTrim = -1; // how far we cut the shield back from being circular; <0 = "don't
+
+echo("switchGapAngle", switchGapAngle);
+echo("bandInnerRadius", bandInnerRadius);
+
 
 module switchShield() {
   translate([0, 0, - bandWidth / 2])
@@ -44,8 +49,8 @@ module switchWindowWedge(xProject = 0, reduceAngle = 0) {
   translate([xProject, 0, + lowerSwitchGuardThickness - (bandWidth / 2)]) // move down to leave visor space
     rotate(- (switchGapAngle - reduceAngle) / 2)
       rotate_extrude(angle = (switchGapAngle - reduceAngle))
-        translate([(bandInnerRadius - xProject) - 10, 0, 0])
-          square([(shieldOverhang) + 15, switchCutWedgeHeight]);
+        translate([(bandInnerRadius - xProject) * 0.9, 0, 0])
+          square([(shieldOverhang) * 1.5, switchCutWedgeHeight]);
 }
 
 module switchWindowBox() {
@@ -88,6 +93,9 @@ module mainBand() {
   }
 }
 
+//switchWindowWedge(- bandInnerRadius * 0.95, 50);
+
+
 color("gray")
   difference() {
     union() {
@@ -100,7 +108,7 @@ color("gray")
 
     // gaps:
     union() {
-      switchWindowWedge(- bandInnerRadius * 0.95, 55);
+      switchWindowWedge(- bandInnerRadius * 0.95, 50);
       switchWindowBox();
       // gap for foot
       footWindow();
