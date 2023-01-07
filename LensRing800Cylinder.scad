@@ -16,14 +16,15 @@ footWidthArc = 40;
 bandWidth = 35;
 bandInnerRadius = barrelCircumference / (2 * PI);
 bandThickness = 2;
-switchBandRemain = 8; // how much we leave above the cut-out for the switches
+upperSwitchGuardThickness = 8; // how much we leave above the cut-out for the switches
+lowerSwitchGuardThickness = 3;
 switchGapAngle = ceil(switchArc * (360 / barrelCircumference));
 footGapStartAngle = ceil(((switchArc / 2) + footOffsetArc) * (360 / barrelCircumference));
 footGapWidthAngle = ceil(footWidthArc * (360 / barrelCircumference));
 shieldEdgeAngle = (footGapStartAngle - (switchGapAngle / 2)); // how wide we want the "pillars"
 shieldOverhang = 15; // mm
 shieldLimiterWidth = bandInnerRadius * 1.5;
-shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
+shieldSquareTrim = 5; // how far we cut the shield back from being circular; <0 = "don't
 
 module switchShield() {
   translate([0, 0, - bandWidth / 2])
@@ -35,13 +36,14 @@ module switchShield() {
 
 module switchWindow() {
   // gap for switches
-  switchCutWedgeHeight = bandWidth - switchBandRemain;
+
+  switchCutWedgeHeight = bandWidth - (upperSwitchGuardThickness + lowerSwitchGuardThickness);
 
   // we only want to span the z-plane if we're assuming symmetry…
   //  translate([0, 0, - switchCutWedgeHeight / 2]) // span z-plane
   // bottom of our wedge should be on z-plane after extrusion
   // if we move down by (bandWidth / 2), wedge bottom is at ring bottom
-  translate([0, 0, - (bandWidth / 2)]) // move down to leave visor space
+  translate([0, 0, + lowerSwitchGuardThickness - (bandWidth / 2)]) // move down to leave visor space
     rotate(- switchGapAngle / 2)
       rotate_extrude(angle = switchGapAngle)
         square([(bandInnerRadius + shieldOverhang) * 1.1, switchCutWedgeHeight]);
