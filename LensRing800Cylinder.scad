@@ -25,6 +25,14 @@ shieldOverhang = 15; // mm
 shieldLimiterWidth = bandInnerRadius * 1.5;
 shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
 
+module switchShield() {
+  translate([0, 0, - bandWidth / 2])
+    rotate(- switchGapAngle / 2 - shieldEdgeAngle)
+      rotate_extrude(angle = switchGapAngle + (shieldEdgeAngle * 2))
+        translate([bandInnerRadius + 0.5, 0, 0])
+          square([shieldOverhang, bandWidth]);
+}
+
 module switchWindow() {
   // gap for switches
   switchCutWedgeHeight = bandWidth;
@@ -32,7 +40,13 @@ module switchWindow() {
     translate([0, 0, - switchBandRemain]) // move down to leave visor space
       rotate(- switchGapAngle / 2)
         rotate_extrude(angle = switchGapAngle)
-          square([bandInnerRadius * 1.1, switchCutWedgeHeight]);
+          square([(bandInnerRadius + shieldOverhang) * 1.1, switchCutWedgeHeight]);
+}
+
+module switchShieldBoundingBox() {
+  limiterEdge = (bandInnerRadius + shieldOverhang - shieldSquareTrim) * 2;
+  fudge = 4; // stop "nicks" at edge of visor
+  cube([limiterEdge, bandInnerRadius * 2 - fudge, bandWidth], center = true);
 }
 
 module footWindow() {
@@ -53,35 +67,10 @@ module mainBand() {
 color("gray")
   difference() {
     union() {
-
       mainBand();
-
       intersection() {
-        union() {
-          // button shield "visor"
-          translate([0, 0, bandWidth / 2 - switchBandRemain])
-            rotate(- switchGapAngle / 2 - shieldEdgeAngle)
-              rotate_extrude(angle = switchGapAngle + (shieldEdgeAngle * 2))
-                translate([bandInnerRadius + 0.5, 0, 0])
-                  square([shieldOverhang, switchBandRemain]);
-
-          // button shield edges
-          translate([0, 0, - bandWidth / 2])
-            rotate(switchGapAngle / 2)
-              rotate_extrude(angle = shieldEdgeAngle)
-                translate([bandInnerRadius + 0.1, 0, 0])
-                  square([shieldOverhang, bandWidth]);
-
-          translate([0, 0, - bandWidth / 2])
-            rotate(- switchGapAngle / 2 - shieldEdgeAngle)
-              rotate_extrude(angle = shieldEdgeAngle)
-                translate([bandInnerRadius + 0.1, 0, 0])
-                  square([shieldOverhang, bandWidth]);
-        }
-        //// button shield limits
-        limiterEdge = (bandInnerRadius + shieldOverhang - shieldSquareTrim) * 2;
-        fudge = 4; // stop "nicks" at edge of visor
-        cube([limiterEdge, bandInnerRadius * 2 - fudge, 1.1 * bandWidth], center = true);
+        switchShield();
+        switchShieldBoundingBox();
       }
     }
 
