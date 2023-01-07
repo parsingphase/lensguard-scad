@@ -1,3 +1,6 @@
+// Switch guard for a Canon RF 800mm f/11 IS STM lens
+// Note: this is an untested (unprinted) model
+
 // fine
 //$fa = 1;
 //$fs = 0.4;
@@ -22,17 +25,14 @@ lowerSwitchGuardWidth = 3; // < 0… don't
 lowerSwitchGuardRelief = 4; // space to let us slide the lower (front) guard over the switches
 
 // Maths
-switchGapAngle = ceil(switchArc * (360 / barrelCircumference));
-footGapStartAngle = ceil(((switchArc / 2) + footOffsetArc) * (360 / barrelCircumference));
-footGapWidthAngle = ceil(footWidthArc * (360 / barrelCircumference));
-shieldEdgeAngle = (footGapStartAngle - (switchGapAngle / 2)); // how wide we want the "pillars"
+switchGapAngle = switchArc * (360 / barrelCircumference);
+footGapStartAngle = ((switchArc / 2) + footOffsetArc) * (360 / barrelCircumference);
+footGapWidthAngle = footWidthArc * (360 / barrelCircumference);
+shieldEdgeAngle = footGapStartAngle - (switchGapAngle / 2); // how wide we want the "pillars"
 shieldThickness = 8; // mm, starts just beyond the inner edge of the band
 shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
 
-echo("switchGapAngle", switchGapAngle);
-echo("bandInnerRadius", bandInnerRadius);
-
-
+// Modules
 module switchShield() {
   translate([0, 0, - bandWidth / 2])
     rotate(- switchGapAngle / 2 - shieldEdgeAngle)
@@ -106,9 +106,7 @@ module mainBand() {
   }
 }
 
-//switchWindowWedge(- bandInnerRadius * 0.95, 50);
-
-
+// Assembly
 color("gray")
   difference() {
     union() {
@@ -119,13 +117,9 @@ color("gray")
       }
     }
 
-    // gaps:
+    // gaps / relief:
     union() {
       switchWindowWedge(0, 0);
-      //      switchWindowWedge(- bandInnerRadius * 0.95, 50);
-      //      switchWindowWedge(- bandInnerRadius * 0.95, 50);
-      //      switchWindowBox();
-      // gap for foot
       footWindow();
       lowerShieldReliefWedge();
     }
