@@ -2,12 +2,12 @@
 // Note: this is an untested (unprinted) model
 
 // fine
-//$fa = 1;
-//$fs = 0.4;
+$fa = 1;
+$fs = 0.4;
 
 //fast
-$fa = 2;
-$fs = 5;
+//$fa = 2;
+//$fs = 5;
 
 // Configuration
 // units: mm (we can measure this with a flexible tape, easier than measuring diameter or angle)
