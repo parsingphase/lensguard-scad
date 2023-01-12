@@ -23,6 +23,23 @@ bandThickness = 2;
 upperSwitchGuardWidth = 8; // how much we leave above the cut-out for the switches
 lowerSwitchGuardWidth = 3; // < 0… don't
 lowerSwitchGuardRelief = 4; // space to let us slide the lower (front) guard over the switches
+// probably only need 2mm lowerSwitchGuardRelief if measures are valid
+
+// Switch ring profile (measured by transfer calipers)
+//  TOWARDS SUBJECT (outside is left)
+//    / - slope -   91mm, asymmetric
+//   | key plateau
+//  || switch       92mm (in groove?)  asymmetric, 3mm from valley
+//   | key plateau  92mm asymmetric
+//    ) valley -    89mm ⌀ symmetric
+//   ( rim          91mm ⌀ symmetric                1 mm from valley
+//  TOWARDS CAMERA
+
+// With barrelCircumference 286, bandInnerDiameter = 91.0366
+// With barrelCircumference 290, bandInnerDiameter = 92.3099
+
+// Possible opportunity to add "spring lever" grippers on inside
+// (diagonal, fixed at one end: ト - tricky to print/support?)
 
 // Maths
 switchGapAngle = switchArc * (360 / barrelCircumference);
