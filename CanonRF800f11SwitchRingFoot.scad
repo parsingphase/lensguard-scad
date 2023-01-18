@@ -9,6 +9,10 @@ $fs = 0.4;
 //$fa = 2;
 //$fs = 5;
 
+// X-axis: towards switches
+// Y-axis: away from foot
+// Z-axis: towards subject
+
 // Configuration
 // units: mm (we can measure this with a flexible tape, easier than measuring diameter or angle)
 barrelCircumferenceMeasured = 286; // measured, at peak of rim
@@ -17,8 +21,9 @@ switchArc = 80; // 80 by tape at switch surface to base of slope
 footOffsetArc = 12; // from end of switches, slope base to slope base
 footWidthArc = 36; // slope base to slope base
 footSurfaceFromCenter = 95 - (91 / 2);
+footPlateThickness = 1; // balance between strength and required screw length
 
-bandWidth = 32; // cylinder height of band
+bandWidth = 32; // cylinder height of band; lens segment is 36 mm, minus 3 at back, 1 at front
 bandInnerRadius = barrelCircumference / (2 * PI);
 bandThickness = 2;
 nearSwitchGuardWidth = 3; // how much we leave on the camera side of the cut-out for the switches
@@ -131,9 +136,27 @@ module mainBand() {
 }
 
 module footMountBlock() {
-  footMountThickness = (footSurfaceFromCenter + bandThickness - bandInnerRadius) * 2;
+  footMountThickness = (footSurfaceFromCenter + footPlateThickness - bandInnerRadius) * 2;
   translate([0, - bandInnerRadius, 0])
-    cube([footWidthArc + 2 * bandThickness, footMountThickness, bandWidth], center = true);
+    difference() {
+      // foot block main body
+      cube([footWidthArc + 2 * footPlateThickness, footMountThickness, bandWidth], center = true);
+      union() {
+        // Main screw hole
+        translate([0, 0, - 3])
+          rotate([90, 0, 0])
+            cylinder(footMountThickness * 1.1, r = 5, center = true);
+        // Main screw should be centered 16 mm from back of lens segment (20 from front)
+        // ie 13mm from back edge of band, 19 from front
+        // band is 32 (CHECK CHANGES!), so default offset is 16
+        // so move 3mm towards back / bottom
+        // pin hole
+        translate([0, 0, 11])
+          rotate([90, 0, 0])
+            cylinder(footMountThickness * 1.1, r = 3, center = true);
+        // Pin should be 27 mm from back of band (5 from front), so r=3 means thin front band
+      }
+    }
 }
 
 module subtractor() {
