@@ -11,19 +11,22 @@ $fs = 0.4;
 
 // Configuration
 // units: mm (we can measure this with a flexible tape, easier than measuring diameter or angle)
-barrelCircumferenceMeasured = 286; // measured - to give wriggle-room, we could increase this a little
-barrelCircumference = 290;
-switchArc = 80;
-footOffsetArc = 12; // from end of switches
-footWidthArc = 40;
+barrelCircumferenceMeasured = 286; // measured, at peak of rim
+barrelCircumference = 280; // Work from measured, at valley, 89 * PI = 279.602
+echo("barrelCircumference",barrelCircumference);
+switchArc = 80; // 80 by tape at switch surface to base of slope
+footOffsetArc = 12; // from end of switches, slope base to slope base
+footWidthArc = 36; // slope base to slope base
 
-bandWidth = 35; // cylinder height of band
+bandWidth = 32; // cylinder height of band
 bandInnerRadius = barrelCircumference / (2 * PI);
 bandThickness = 2;
-broadSwitchGuardWidth = 8; // how much we leave on the camera side of the cut-out for the switches
+broadSwitchGuardWidth = 3; // how much we leave on the camera side of the cut-out for the switches
 narrowSwitchGuardWidth = 3; // < 0… don't
-narrowSwitchGuardRelief = 4; // space to let us slide the front guard over the switches
+narrowSwitchGuardRelief = 2; // space to let us slide the front guard over the switches
 // probably only need 2mm narrowSwitchGuardRelief if measures are valid
+shieldThickness = 5; // mm, starts just beyond the inner edge of the band
+shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
 
 // Switch ring profile (measured by transfer calipers)
 //  TOWARDS SUBJECT (outside is left)
@@ -46,8 +49,6 @@ switchGapAngle = switchArc * (360 / barrelCircumference);
 footGapStartAngle = ((switchArc / 2) + footOffsetArc) * (360 / barrelCircumference);
 footGapWidthAngle = footWidthArc * (360 / barrelCircumference);
 shieldEdgeAngle = footGapStartAngle - (switchGapAngle / 2); // how wide we want the "pillars"
-shieldThickness = 8; // mm, starts just beyond the inner edge of the band
-shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
 
 // Modules
 module switchShield() {
