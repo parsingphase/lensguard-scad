@@ -20,10 +20,10 @@ footWidthArc = 40;
 bandWidth = 35; // cylinder height of band
 bandInnerRadius = barrelCircumference / (2 * PI);
 bandThickness = 2;
-upperSwitchGuardWidth = 8; // how much we leave above the cut-out for the switches
-lowerSwitchGuardWidth = 3; // < 0… don't
-lowerSwitchGuardRelief = 4; // space to let us slide the lower (front) guard over the switches
-// probably only need 2mm lowerSwitchGuardRelief if measures are valid
+broadSwitchGuardWidth = 8; // how much we leave on the camera side of the cut-out for the switches
+narrowSwitchGuardWidth = 3; // < 0… don't
+narrowSwitchGuardRelief = 4; // space to let us slide the front guard over the switches
+// probably only need 2mm narrowSwitchGuardRelief if measures are valid
 
 // Switch ring profile (measured by transfer calipers)
 //  TOWARDS SUBJECT (outside is left)
@@ -59,13 +59,13 @@ module switchShield() {
 }
 
 module switchWindowWedge(xProject = 0, reduceAngle = 0) {
-  // gap for switches
+  // gap for switches, wedge version
 
-  switchCutWedgeHeight = bandWidth - (upperSwitchGuardWidth + lowerSwitchGuardWidth);
+  switchCutWedgeHeight = bandWidth - (broadSwitchGuardWidth + narrowSwitchGuardWidth);
 
   // bottom of our wedge should be on z-plane after extrusion
   // if we move down by (bandWidth / 2), wedge bottom is at ring bottom
-  translate([xProject, 0, + lowerSwitchGuardWidth - (bandWidth / 2)]) // move down to leave visor space
+  translate([xProject, 0, + broadSwitchGuardWidth - (bandWidth / 2)]) // move down to leave visor space
     rotate(- (switchGapAngle - reduceAngle) / 2)
       rotate_extrude(angle = (switchGapAngle - reduceAngle))
         translate([(bandInnerRadius - xProject) - 0.5, 0, 0])
@@ -73,9 +73,9 @@ module switchWindowWedge(xProject = 0, reduceAngle = 0) {
 }
 
 module switchWindowBox() {
-  // gap for switches
+  // gap for switches, box version - not currently used
 
-  switchCutWedgeHeight = bandWidth - (upperSwitchGuardWidth + lowerSwitchGuardWidth);
+  switchCutWedgeHeight = bandWidth - (broadSwitchGuardWidth + narrowSwitchGuardWidth);
 
   // we only want to span the z-plane if we're assuming symmetry…
   //  translate([0, 0, - switchCutWedgeHeight / 2]) // span z-plane
@@ -84,10 +84,8 @@ module switchWindowBox() {
 
   slotBoxLength = bandInnerRadius + 2 * shieldThickness;
   slotBoxWidth = 2 * (bandInnerRadius * sin(switchGapAngle / 2));
-  echo("slotBoxLength", slotBoxLength);
-  echo("slotBoxWidth", slotBoxWidth);
-  echo("switchCutWedgeHeight", switchCutWedgeHeight);
-  translate([0, - slotBoxWidth / 2, + lowerSwitchGuardWidth - (bandWidth / 2)]) // move down to leave visor space
+
+  translate([0, - slotBoxWidth / 2, + broadSwitchGuardWidth - (bandWidth / 2)]) // move down to leave visor space
     cube([slotBoxLength, slotBoxWidth, switchCutWedgeHeight]);
 }
 
@@ -97,22 +95,20 @@ module switchShieldBoundingBox() {
   cube([limiterEdge, bandInnerRadius * 2 - fudge, bandWidth], center = true);
 }
 
-module lowerShieldReliefWedge() {
-  // gap for switches
-  switchCutWedgeHeight = bandWidth - (upperSwitchGuardWidth + lowerSwitchGuardWidth);
+module narrowShieldReliefWedge() {
   // bottom of our wedge should be on z-plane after extrusion
   // if we move down by (bandWidth / 2), wedge bottom is at ring bottom
-  translate([0, 0, - lowerSwitchGuardWidth / 2 - bandWidth / 2]) // move down to leave visor space
+  translate([0, 0, - narrowSwitchGuardWidth * 1.5 + bandWidth / 2]) // move down to leave visor space
     rotate(- (switchGapAngle) / 2)
       rotate_extrude(angle = (switchGapAngle))
-        square([bandInnerRadius + lowerSwitchGuardRelief, lowerSwitchGuardWidth * 2]);
+        square([bandInnerRadius + narrowSwitchGuardRelief, narrowSwitchGuardWidth * 2]);
 }
 
 module footWindow() {
   footCutWedgeHeight = bandWidth * 1.1;
   translate([0, 0, - footCutWedgeHeight / 2]) // span z-plane
-    rotate(footGapStartAngle)
-      rotate_extrude(angle = footGapWidthAngle)
+    rotate(- footGapStartAngle)
+      rotate_extrude(angle = - footGapWidthAngle)
         square([bandInnerRadius * 1.1, footCutWedgeHeight]);
 }
 
@@ -120,6 +116,15 @@ module mainBand() {
   difference() {
     cylinder(bandWidth, r = bandInnerRadius + bandThickness, center = true);
     cylinder(1.1 * bandWidth, r = bandInnerRadius, center = true);
+  }
+}
+
+module subtractor() {
+  // gaps / relief:
+  union() {
+    switchWindowWedge(0, 0);
+    footWindow();
+    narrowShieldReliefWedge();
   }
 }
 
@@ -134,11 +139,5 @@ color("gray")
       }
     }
 
-    // gaps / relief:
-    union() {
-      switchWindowWedge(0, 0);
-      footWindow();
-      lowerShieldReliefWedge();
-    }
+    subtractor();
   };
-
