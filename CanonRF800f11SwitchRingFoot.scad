@@ -53,7 +53,8 @@ shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <
 switchGapAngle = switchArc * (360 / barrelCircumference);
 footGapStartAngle = ((switchArc / 2) + footOffsetArc) * (360 / barrelCircumference);
 footGapWidthAngle = footWidthArc * (360 / barrelCircumference);
-shieldEdgeAngle = footGapStartAngle - (switchGapAngle / 2); // how wide we want the "pillars"
+pillarWidthFudge = 8; // increase angle until we don't get a notch when we apply bounding box
+shieldEdgeAngle = footGapStartAngle - (switchGapAngle / 2) + pillarWidthFudge; // how wide we want the "pillars"
 
 // Modules
 module switchShield() {
@@ -97,7 +98,7 @@ module switchWindowBox() {
 
 module switchShieldBoundingBox() {
   limiterEdge = (bandInnerRadius + shieldThickness - shieldSquareTrim) * 2;
-  fudge = 4; // stop "nicks" at edge of visor
+  fudge = 0; // stop "nicks" at edge of visor
   cube([limiterEdge, bandInnerRadius * 2 - fudge, bandWidth], center = true);
 }
 
