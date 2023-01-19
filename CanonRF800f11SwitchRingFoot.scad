@@ -33,6 +33,8 @@ farSwitchGuardRelief = 2; // space to let us slide the front guard over the swit
 shieldThickness = 5; // mm, starts just beyond the inner edge of the band
 shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
 
+bandAdjustmentGap = 3; // How wide a gap to leave in the band to allow tension adjustment, <=0 for none
+
 // Switch ring profile (measured by transfer calipers)
 //  TOWARDS SUBJECT (outside is left)
 //    / - slope -   91mm, asymmetric
@@ -160,6 +162,13 @@ module footMountBlock() {
     }
 }
 
+module mainBandGap() {
+  if (bandAdjustmentGap > 0) {
+    translate([0, - footSurfaceFromCenter - bandThickness / 2, 0])
+      cube([bandAdjustmentGap, , 2 * bandThickness, 1.1 * bandWidth], center = true);
+  }
+}
+
 module subtractor() {
   // gaps / relief:
   union() {
@@ -168,6 +177,7 @@ module subtractor() {
     footCutOut();
     farShieldReliefWedge();
     cylinderCore();
+    mainBandGap();
   }
 }
 
@@ -185,3 +195,6 @@ color("gray")
 
     subtractor();
   };
+
+//color("green")
+//  subtractor();
