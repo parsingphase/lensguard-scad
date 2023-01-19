@@ -37,6 +37,7 @@ shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <
 switchDisplayOffsetArc = 6;
 shieldPillarWidthArc = 12; // limited gap from switches to display, we might make one end wider
 displayPanelHeight = 16;
+bandAdjustmentGap = 3; // How wide a gap to leave in the band to allow tension adjustment, <=0 for none
 
 // Maths
 switchGapAngle = switchArc * (360 / barrelCircumference);
@@ -114,6 +115,13 @@ module mainBand() {
   }
 }
 
+module mainBandGap() {
+  if (bandAdjustmentGap > 0) {
+    translate([- bandInnerRadius - bandThickness / 2, 0, 0])
+      cube([2 * bandThickness, bandAdjustmentGap, 1.1 * bandWidth], center = true);
+  }
+}
+
 module subtractor() {
   // gaps / relief:
   union() {
@@ -124,6 +132,7 @@ module subtractor() {
       translate([0, 0, bandWidth / 2])
         switchWindowBox();
     }
+    mainBandGap();
   }
 }
 
