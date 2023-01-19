@@ -16,12 +16,13 @@ $fs = 0.4;
 // Configuration
 // units: mm (we can measure this with a flexible tape, easier than measuring diameter or angle)
 barrelCircumferenceMeasured = 286; // measured, at peak of rim
-barrelCircumference = 286; // Work for 91mm diameter when closing loop with foot
+//barrelCircumference = 286; // Work for 91mm diameter when closing loop with foot
+barrelCircumference = 282; // Work for 90mm diameter when foot has adjustment
 switchArc = 80; // 80 by tape at switch surface to base of slope
 footOffsetArc = 12; // from end of switches, slope base to slope base
 footWidthArc = 36; // slope base to slope base
-footSurfaceFromCenter = 95 - (91 / 2);
-footPlateThickness = 1; // balance between strength and required screw length
+footSurfaceFromCenter = 95 - (90 / 2);
+footPlateThickness = 2; // balance between strength and required screw length
 
 bandWidth = 32; // cylinder height of band; lens segment is 36 mm, minus 3 at back, 1 at front
 bandInnerRadius = barrelCircumference / (2 * PI);
