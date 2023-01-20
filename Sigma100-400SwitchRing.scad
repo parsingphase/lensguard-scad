@@ -38,6 +38,9 @@ shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <
 shieldPillarWidthArc = 12; // limited gap from switches to display, we might make one end wider
 displayPanelHeight = 12;
 bandAdjustmentGap = 3; // How wide a gap to leave in the band to allow tension adjustment, <=0 for none
+closureScrewOutsideDiameter = 3 ; // #4 screw = 0.1120" = 2.84 mm
+closureScrewWasherDiameter = 7; // Larger of head / washer. If you want clearance from washer to band, add it here
+// Estimate on #4 screw - 1/4" per https://threadsource.com/us-nut-size-table/
 
 // Maths
 switchGapAngle = switchArc * (360 / barrelCircumference);
@@ -108,23 +111,47 @@ module displayWindow() {
         square([bandInnerRadius * 1.1, displayCutWedgeHeight]);
 }
 
-module mainBand() {
-  difference() {
+module mainBandOuterCylinder() {
     cylinder(bandWidth, r = bandInnerRadius + bandThickness, center = true);
+}
+
+module mainBandInnerCylinder() {
     cylinder(1.1 * bandWidth, r = bandInnerRadius, center = true);
+  }
+
+module closingScrewMount() {
+  // screw mount natural radius:
+  screwMountRadius = bandWidth / 2;
+  screwMountScale = (closureScrewWasherDiameter / screwMountRadius);
+  //subtract mainBandGap from this
+  if (bandAdjustmentGap > 0) {
+    // screw mount
+    translate([- (bandInnerRadius + bandThickness), 0, 0])
+      rotate([90, 0, 0])
+        scale([screwMountScale, 1, 1]) // Reduce from semicircle.
+          // scale depends on screw size & hole offset
+          cylinder(2 * bandThickness + bandAdjustmentGap, r = screwMountRadius, center = true);
   }
 }
 
+//subtractable
 module mainBandGap() {
   if (bandAdjustmentGap > 0) {
+    // gap
     translate([- bandInnerRadius - bandThickness / 2, 0, 0])
-      cube([2 * bandThickness, bandAdjustmentGap, 1.1 * bandWidth], center = true);
+      cube([2 * bandWidth, bandAdjustmentGap, 1.1 * bandWidth], center = true);
+
+    // screw hole
+    translate([- bandInnerRadius - bandThickness - (closureScrewWasherDiameter / 2), 0, 0])
+      rotate([90, 0, 0])
+        cylinder(2.2 * bandThickness + bandAdjustmentGap, r = closureScrewOutsideDiameter / 2, center = true);
   }
 }
 
 module subtractor() {
   // gaps / relief:
   union() {
+    mainBandInnerCylinder();
     switchWindowBox();
     displayWindow();
     intersection() {
@@ -140,11 +167,12 @@ module subtractor() {
 color("gray")
   difference() {
     union() {
-      mainBand();
+      mainBandOuterCylinder();
       intersection() {
         switchShield();
         switchShieldBoundingBox();
       }
+      closingScrewMount();
     }
 
     subtractor();

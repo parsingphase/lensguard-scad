@@ -1,4 +1,4 @@
-// Switch guard for a Sigma 150-600mm zoom lens
+  // Switch guard for a Sigma 150-600mm zoom lens
 // Measured on a Canon EF mount variant
 // Note: this is an untested (unprinted) model
 
@@ -22,6 +22,7 @@ barrelCircumferenceMeasured = 279;
 barrelCircumference = barrelCircumferenceMeasured;
 switchArc = 90;
 displayArc = 46;
+switchDisplayOffsetArc = 6;
 
 ringSegmentWidth = 29; // how wide the actual lens segment is - not used for calculation
 ringSegmentMeasuredDiameter = 88; // caliper-measured, not used for calculation, just for checking radius
@@ -34,7 +35,6 @@ farSwitchGuardWidth = 3; // < 0… don't
 farSwitchGuardRelief = 5; // space to let us slide the front guard over the switches
 shieldThickness = 8; // mm, starts just beyond the inner edge of the band
 shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
-switchDisplayOffsetArc = 6;
 shieldPillarWidthArc = 12; // limited gap from switches to display, we might make one end wider
 displayPanelHeight = 16;
 bandAdjustmentGap = 3; // How wide a gap to leave in the band to allow tension adjustment, <=0 for none
