@@ -38,6 +38,9 @@ switchDisplayOffsetArc = 6;
 shieldPillarWidthArc = 12; // limited gap from switches to display, we might make one end wider
 displayPanelHeight = 16;
 bandAdjustmentGap = 3; // How wide a gap to leave in the band to allow tension adjustment, <=0 for none
+closureScrewOutsideDiameter = 3 ; // #4 screw = 0.1120" = 2.84 mm
+closureScrewWasherDiameter = 7; // Larger of head / washer. If you want clearance from washer to band, add it here
+// Estimate on #4 screw - 1/4" per https://threadsource.com/us-nut-size-table/
 
 // Maths
 switchGapAngle = switchArc * (360 / barrelCircumference);
@@ -117,29 +120,31 @@ module mainBandInnerCylinder() {
 }
 
 module closingScrewMount() {
+  // screw mount natural radius:
+  screwMountRadius = bandWidth / 2;
+  screwMountScale = (closureScrewWasherDiameter / screwMountRadius);
   //subtract mainBandGap from this
   if (bandAdjustmentGap > 0) {
     // screw mount
     translate([- (bandInnerRadius + bandThickness), 0, 0])
       rotate([90, 0, 0])
-        scale([0.8, 1, 1]) // Reduce from semicircle.
+        scale([screwMountScale, 1, 1]) // Reduce from semicircle.
           // scale depends on screw size & hole offset
-          cylinder(2 * bandThickness + bandAdjustmentGap, r = bandWidth / 2, center = true);
+          cylinder(2 * bandThickness + bandAdjustmentGap, r = screwMountRadius, center = true);
   }
 }
 
 //subtractable
 module mainBandGap() {
-  screwOutsideDiameter = 3 ; // #4 screw = 0.1120" = 2.84 mm
   if (bandAdjustmentGap > 0) {
     // gap
     translate([- bandInnerRadius - bandThickness / 2, 0, 0])
       cube([2 * bandWidth, bandAdjustmentGap, 1.1 * bandWidth], center = true);
 
     // screw hole
-    translate([- bandInnerRadius - bandThickness - 2 * screwOutsideDiameter, 0, 0])
+    translate([- bandInnerRadius - bandThickness - (closureScrewWasherDiameter / 2), 0, 0])
       rotate([90, 0, 0])
-        cylinder(2.2 * bandThickness + bandAdjustmentGap, r = screwOutsideDiameter / 2, center = true);
+        cylinder(2.2 * bandThickness + bandAdjustmentGap, r = closureScrewOutsideDiameter / 2, center = true);
   }
 }
 
