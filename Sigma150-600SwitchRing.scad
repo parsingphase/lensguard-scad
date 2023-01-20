@@ -108,23 +108,45 @@ module displayWindow() {
         square([bandInnerRadius * 1.1, displayCutWedgeHeight]);
 }
 
-module mainBand() {
-  difference() {
-    cylinder(bandWidth, r = bandInnerRadius + bandThickness, center = true);
-    cylinder(1.1 * bandWidth, r = bandInnerRadius, center = true);
+module mainBandOuterCylinder() {
+  cylinder(bandWidth, r = bandInnerRadius + bandThickness, center = true);
+}
+
+module mainBandInnerCylinder() {
+  cylinder(1.1 * bandWidth, r = bandInnerRadius, center = true);
+}
+
+module closingScrewMount() {
+  //subtract mainBandGap from this
+  if (bandAdjustmentGap > 0) {
+    // screw mount
+    translate([- (bandInnerRadius + bandThickness), 0, 0])
+      rotate([90, 0, 0])
+        scale([0.8, 1, 1]) // Reduce from semicircle.
+          // scale depends on screw size & hole offset
+          cylinder(2 * bandThickness + bandAdjustmentGap, r = bandWidth / 2, center = true);
   }
 }
 
+//subtractable
 module mainBandGap() {
+  screwOutsideDiameter = 3 ; // #4 screw = 0.1120" = 2.84 mm
   if (bandAdjustmentGap > 0) {
+    // gap
     translate([- bandInnerRadius - bandThickness / 2, 0, 0])
-      cube([2 * bandThickness, bandAdjustmentGap, 1.1 * bandWidth], center = true);
+      cube([2 * bandWidth, bandAdjustmentGap, 1.1 * bandWidth], center = true);
+
+    // screw hole
+    translate([- bandInnerRadius - bandThickness - 2 * screwOutsideDiameter, 0, 0])
+      rotate([90, 0, 0])
+        cylinder(2.2 * bandThickness + bandAdjustmentGap, r = screwOutsideDiameter / 2, center = true);
   }
 }
 
 module subtractor() {
   // gaps / relief:
   union() {
+    mainBandInnerCylinder();
     switchWindowBox();
     displayWindow();
     intersection() {
@@ -140,11 +162,12 @@ module subtractor() {
 color("gray")
   difference() {
     union() {
-      mainBand();
+      mainBandOuterCylinder();
       intersection() {
         switchShield();
         switchShieldBoundingBox();
       }
+      closingScrewMount();
     }
 
     subtractor();
