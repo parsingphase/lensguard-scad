@@ -23,9 +23,11 @@ SCAD_FILES=$(find "${SCRIPT_DIR}" -depth 1 -name "*.scad")
 for SCAD_FILE in $SCAD_FILES
 do
   BASEFILE=$(basename $SCAD_FILE)
-  DESTFILE="${BASEFILE%.scad}.stl"
-  echo "$BASEFILE => $DESTFILE"
-  $OPENSCAD_PATH -o "$DESTFILE" --export-format binstl "$BASEFILE"
+  STLFILE="${BASEFILE%.scad}.stl"
+  PNGFILE="docs/${BASEFILE%.scad}.png"
+  echo "$BASEFILE => $STLFILE"
+  $OPENSCAD_PATH -o "$STLFILE" --export-format binstl "$BASEFILE"
+  $OPENSCAD_PATH -o "$PNGFILE" --camera=0,0,0,210,0,190,350 --projection=ortho --colorscheme=Tomorrow "$BASEFILE"
 done
 
 echo DONE

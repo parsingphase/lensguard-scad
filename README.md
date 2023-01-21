@@ -5,17 +5,14 @@
 Note that these designs are prototypes and most have, as yet, not been printed, let alone tested.
 Also, don't assume that the `.stl` files are correctly updated from the `.scad` files.
 
-## Example views
-
-![800mmRing.png](docs/800mmRing.png)
-
-![SigmaRing.png](docs/SigmaRing.png)
-
 ## Available guards
 
 STL links will display the file in an interactive viewer.
 
 ### Canon RF 800mm f/11 IS STM Lens
+
+![CanonRF800f11SwitchRingFoot.png](docs%2FCanonRF800f11SwitchRingFoot.png)
+![CanonRF800f11SwitchRingNoFoot.png](docs%2FCanonRF800f11SwitchRingNoFoot.png)
 
 This lens has a tripod mounting foot (of sorts) in the same ring segment as the switches.
 As such there are two prototypes for this lens, one that omits the foot mounting entirely,
@@ -32,8 +29,11 @@ Another fun aspect of this lens is that the ring segment is not flat, so fit is 
 ### Sigma 150-600mm f/5-6.3 DG OS HSM Contemporary Lens for Canon EF
 ### Sigma 100-400mm f/5-6.3 DG OS HSM Contemporary Lens for Canon EF
 
+![Sigma150-600SwitchRing.png](docs%2FSigma150-600SwitchRing.png)
+![Sigma100-400SwitchRing.png](docs%2FSigma100-400SwitchRing.png)
+
 These lenses are a very similar design; the lens segments are unobstructed by any foot mount 
-and have a flat cross-section. Current designs have a fitting for a #4 closure bolt on the underside.
+and have a flat cross-section. Current designs have a fitting for a #4 closure bolt opposite the switch window.
 
 * 150-600: [STL](Sigma150-600SwitchRing.stl), [SCAD](Sigma150-600SwitchRing.scad)
 * 100-400: [STL](Sigma100-400SwitchRing.stl), [SCAD](Sigma100-400SwitchRing.scad)
