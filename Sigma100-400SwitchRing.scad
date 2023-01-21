@@ -37,7 +37,7 @@ shieldThickness = 8; // mm, starts just beyond the inner edge of the band
 shieldSquareTrim = - 1; // how far we cut the shield back from being circular; <0 = "don't
 shieldPillarWidthArc = 12; // limited gap from switches to display, we might make one end wider
 displayPanelHeight = 12;
-bandAdjustmentGap = 3; // How wide a gap to leave in the band to allow tension adjustment, <=0 for none
+bandAdjustmentGap = 6; // How wide a gap to leave in the band to allow tension adjustment, <=0 for none
 closureScrewOutsideDiameter = 3 ; // #4 screw = 0.1120" = 2.84 mm
 closureScrewWasherDiameter = 7; // Larger of head / washer. If you want clearance from washer to band, add it here
 // Estimate on #4 screw - 1/4" per https://threadsource.com/us-nut-size-table/

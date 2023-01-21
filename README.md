@@ -35,5 +35,5 @@ Another fun aspect of this lens is that the ring segment is not flat, so fit is 
 These lenses are a very similar design; the lens segments are unobstructed by any foot mount 
 and have a flat cross-section. Current designs have a fitting for a #4 closure bolt on the underside.
 
-* 100-400: [STL](Sigma100-400SwitchRing.stl), [SCAD](Sigma100-400SwitchRing.scad)
 * 150-600: [STL](Sigma150-600SwitchRing.stl), [SCAD](Sigma150-600SwitchRing.scad)
+* 100-400: [STL](Sigma100-400SwitchRing.stl), [SCAD](Sigma100-400SwitchRing.scad)
