@@ -2,7 +2,7 @@
 
 [STL](https://en.wikipedia.org/wiki/STL_(file_format)) printable files and [OpenSCAD](https://openscad.org) working files.
 
-Note that these designs are prototypes and most have, as yet, not been printed, let alone tested.
+Note that these designs are prototypes and have not been used in the field yet.
 Also, don't assume that the `.stl` files are correctly updated from the `.scad` files.
 
 ## Available guards
@@ -37,3 +37,17 @@ and have a flat cross-section. Current designs have a fitting for a #4 closure b
 
 * 150-600: [STL](Sigma150-600SwitchRing.stl), [SCAD](Sigma150-600SwitchRing.scad)
 * 100-400: [STL](Sigma100-400SwitchRing.stl), [SCAD](Sigma100-400SwitchRing.scad)
+
+## Printed rings
+
+Printed in ABS by Taurus 3D via [CraftCloud3D](https://craftcloud3d.com/). I've not fit the other guards yet.
+
+### Canon RF 800mm f/11 IS STM Lens
+
+![CanonRF800f11SwitchRingFootMountingView.jpg](docs%2FCanonRF800f11SwitchRingFootMountingView.jpg)
+![CanonRF800f11SwitchRingFootWindowView.jpg](docs%2FCanonRF800f11SwitchRingFootWindowView.jpg)
+
+### Sigma 150-600mm f/5-6.3 Lens
+
+![Sigma150-600SwitchRingMountingView.jpg](docs%2FSigma150-600SwitchRingMountingView.jpg)
+![Sigma150-600SwitchRingWindowView.jpg](docs%2FSigma150-600SwitchRingWindowView.jpg)
